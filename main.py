@@ -29,7 +29,6 @@ bulletReady= True
 BulletImage = pygame.image.load('bullet.png')
 bulletXpos = random.randint(0,736)
 bulletYpos = playerYpos
-bulletXmove = 0
 bulletYmove = 10
 
 def alien(x, y):
@@ -74,9 +73,13 @@ while running:  # game loop
     elif alienXpos >= 736:
         alienXpos = 736
         alienXmove = -1 * alienXmove
+    if bulletReady== False:
+        bullet(playerXpos,bulletYpos)
+        bulletYpos -= bulletYmove
     if alienYpos >= 600 :
         alienXpos = random.randint(0, 736)
         alienYpos = random.randint(0, 200)
+
     player(playerXpos, playerYpos)
     alien(alienXpos,alienYpos)
     pygame.display.update()
