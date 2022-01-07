@@ -51,13 +51,20 @@ while running:  # game loop
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 playerXmove = -3
-            if event.key == pygame.K_SPACE:
-                bullet(playerXpos, playerYpos)
             elif event.key == pygame.K_RIGHT:
                 playerXmove = 3
+            elif event.key == pygame.K_SPACE:
+                if bulletReady:
+                    bulletXpos = playerXpos
+                    bullet(bulletXpos, playerYpos)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                playerXmove = 0
+                if event.key == pygame.K_LEFT and playerXmove > 0:
+                    playerXmove += 0
+                elif event.key == pygame.K_RIGHT and playerXmove < 0:
+                        playerXmove += 0
+                else:
+                    playerXmove = 0
 
 
     playerXpos += playerXmove
@@ -74,8 +81,12 @@ while running:  # game loop
         alienXpos = 736
         alienXmove = -1 * alienXmove
     if bulletReady== False:
-        bullet(playerXpos,bulletYpos)
+        bullet(bulletXpos,bulletYpos)
         bulletYpos -= bulletYmove
+        if bulletYpos <= -32:
+           bulletYpos = 480
+           bulletReady = True
+
     if alienYpos >= 600 :
         alienXpos = random.randint(0, 736)
         alienYpos = random.randint(0, 200)
