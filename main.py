@@ -1,6 +1,7 @@
+import math
 import pygame
 import random
-# initialize pygame
+
 pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
@@ -42,7 +43,12 @@ def bullet(x,y):
 def player(x, y):
     screen.blit(PlayerImage, (x, y))
 
-
+def collide(enemyX,enemyY,bulletX,bulletY):
+    distance = math.sqrt(math.pow(enemyX-bulletX,2) + math.pow(enemyY-bulletY,2))
+    if distance <=27:
+        return True
+    else:
+        return False
 while running:  # game loop
     screen.fill((60, 10, 70))  # RGB screenfill
     for event in pygame.event.get():
