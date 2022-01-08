@@ -1,11 +1,12 @@
 import math
 import pygame
 import random
-
+from pygame import mixer
 pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
-
+mixer.music.load('background.wav')
+mixer.music.play(-1)
 # # Screeetup
 pygame.display.set_caption('Space Invaders')
 icn = pygame.image.load('alien-pixelated-shape-of-a-digital-game-3.png')
@@ -19,12 +20,24 @@ playerXmove = 0
 playerYmove = 0
 
 # alien Atacker
-AlienImage = pygame.image.load('monster.png')
-alienXpos = random.randint(0,736)
-alienYpos = random.randint(0,200)
-alienXmove =3
-alienYmove = .5
+pic = pygame.image.load('monster.png')
+AlienImage = []
+alienXpos = []
+alienYpos =[]
+alienXmove =[]
+alienYmove =[]
 bulletReady= True
+num_of_enemy =4
+for i in range (num_of_enemy):
+    AlienImage.append(pic)
+    alienXpos.append(random.randint(0,800))
+    alienYpos.append(random.randint(0,400))
+    if i < 2:
+        alienXmove.append(-2)
+    else:
+        alienXmove.append(4)
+    alienYmove.append(.5)
+
 
 #Bullet
 BulletImage = pygame.image.load('bullet.png')
@@ -33,7 +46,7 @@ bulletYpos = playerYpos
 bulletYmove = 10
 
 def alien(x, y):
-    screen.blit(AlienImage, (x, y))
+    screen.blit(pic, (x, y))
 
 def bullet(x,y):
     global bulletReady
@@ -45,10 +58,17 @@ def player(x, y):
 
 def collide(enemyX,enemyY,bulletX,bulletY):
     distance = math.sqrt(math.pow(enemyX-bulletX,2) + math.pow(enemyY-bulletY,2))
-    if distance <=27:
+    if distance <=36:
         return True
     else:
         return False
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf',32)
+
+def score_shower(x,y):
+        score = font.render("Score:" + str(score_value),True,(250,255,255))
+        screen.blit(score,(x,y))
+
 while running:  # game loop
     screen.fill((60, 10, 70))  # RGB screenfill
     for event in pygame.event.get():
@@ -63,6 +83,7 @@ while running:  # game loop
                 if bulletReady:
                     bulletXpos = playerXpos
                     bullet(bulletXpos, playerYpos)
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 if event.key == pygame.K_LEFT and playerXmove > 0:
@@ -78,25 +99,33 @@ while running:  # game loop
         playerXpos = 0
     elif playerXpos >= 736:
         playerXpos = 736
-    alienXpos += alienXmove
-    alienYpos += alienYmove
-    if alienXpos <= 0:
-        alienXpos = 0
-        alienXmove = -1*alienXmove
-    elif alienXpos >= 736:
-        alienXpos = 736
-        alienXmove = -1 * alienXmove
-    if bulletReady== False:
-        bullet(bulletXpos,bulletYpos)
+    if bulletReady == False:
+        bullet(bulletXpos, bulletYpos)
         bulletYpos -= bulletYmove
         if bulletYpos <= -32:
-           bulletYpos = 480
-           bulletReady = True
+            bulletYpos = 480
+            bulletReady = True
+    for i in range(num_of_enemy):
+        alienXpos[i] += alienXmove[i]
+        alienYpos[i] += alienYmove[i]
+        if alienXpos[i] <= 0:
+            alienXpos[i] = 0
+            alienXmove[i] = -1*alienXmove[i]
+        elif alienXpos[i] >= 736:
+            alienXpos[i] = 736
+            alienXmove[i] = -1 * alienXmove[i]
 
-    if alienYpos >= 600 :
-        alienXpos = random.randint(0, 736)
-        alienYpos = random.randint(0, 200)
 
+        if alienYpos[i] >= 600 :
+            alienXpos[i] = random.randint(0, 736)
+            alienYpos[i] = random.randint(0, 200)
+        if collide(alienXpos[i],alienYpos[i],bulletXpos,bulletYpos):
+            if bulletReady == False:
+                alienXpos[i] = random.randint(0, 736)
+                alienYpos[i] = random.randint(0, 200)
+                bulletReady = True
+                score_value += 1
+        alien(alienXpos[i], alienYpos[i])
     player(playerXpos, playerYpos)
-    alien(alienXpos,alienYpos)
+    score_shower(10,10)
     pygame.display.update()
