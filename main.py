@@ -64,14 +64,16 @@ def collide(enemyX,enemyY,bulletX,bulletY):
         return False
 score_value = 0
 font = pygame.font.Font('freesansbold.ttf',32)
-fontx = pygame.font.Font('freesansbold.ttf',72)
+font_end = pygame.font.Font('freesansbold.ttf', 72)
 def score_shower(x,y):
         score = font.render("Score:" + str(score_value),True,(250,255,255))
         screen.blit(score,(x,y))
 def GAMEOVER():
-    text = fontx.render("GAME OVER",True,(255,0,0))
+    text = font_end.render("GAME OVER", True, (255, 0, 0))
+    screen.blit(text,(200,70))
+background = pygame.image.load('background.png')
 while running:  # game loop
-    screen.fill((60, 10, 70))  # RGB screenfill
+    screen.blit(background,(0,0))  # RGB screenfill
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -135,8 +137,8 @@ while running:  # game loop
             for j in range(num_of_enemy):
                 alienXpos[j] = 20000
                 alienYmove[j]= 0
-                for j in range(num_of_enemy):
-                    alienXpos[j] = 20000
+                for z in range(num_of_enemy):
+                    alienXpos[z] = 20000
                     pygame.display.update()
                 GAMEOVER()
             running = False
