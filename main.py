@@ -64,11 +64,12 @@ def collide(enemyX,enemyY,bulletX,bulletY):
         return False
 score_value = 0
 font = pygame.font.Font('freesansbold.ttf',32)
-
+fontx = pygame.font.Font('freesansbold.ttf',72)
 def score_shower(x,y):
         score = font.render("Score:" + str(score_value),True,(250,255,255))
         screen.blit(score,(x,y))
-
+def GAMEOVER():
+    text = fontx.render("GAME OVER",True,(255,0,0))
 while running:  # game loop
     screen.fill((60, 10, 70))  # RGB screenfill
     for event in pygame.event.get():
@@ -81,6 +82,8 @@ while running:  # game loop
                 playerXmove = 3
             elif event.key == pygame.K_SPACE:
                 if bulletReady:
+                    bulletSound =mixer.Sound('laser.wav')
+                    bulletSound.play()
                     bulletXpos = playerXpos
                     bullet(bulletXpos, playerYpos)
 
@@ -111,21 +114,43 @@ while running:  # game loop
         if alienXpos[i] <= 0:
             alienXpos[i] = 0
             alienXmove[i] = -1*alienXmove[i]
-        elif alienXpos[i] >= 736:
+        elif alienXpos[i] in range (736,800):
             alienXpos[i] = 736
             alienXmove[i] = -1 * alienXmove[i]
 
 
-        if alienYpos[i] >= 600 :
+        if alienYpos[i] in range (602,700) :
             alienXpos[i] = random.randint(0, 736)
             alienYpos[i] = random.randint(0, 200)
         if collide(alienXpos[i],alienYpos[i],bulletXpos,bulletYpos):
             if bulletReady == False:
                 alienXpos[i] = random.randint(0, 736)
                 alienYpos[i] = random.randint(0, 200)
+                killSound = mixer.Sound('explosion.wav')
+                killSound.play()
                 bulletReady = True
                 score_value += 1
+
+        if collide(alienXpos[i],alienYpos[i],playerXpos,playerYpos):
+            for j in range(num_of_enemy):
+                alienXpos[j] = 20000
+                alienYmove[j]= 0
+                for j in range(num_of_enemy):
+                    alienXpos[j] = 20000
+                    pygame.display.update()
+                GAMEOVER()
+            running = False
         alien(alienXpos[i], alienYpos[i])
     player(playerXpos, playerYpos)
     score_shower(10,10)
     pygame.display.update()
+playerXpos = [10000,1000000,1000000,1000000,10000,1000000]
+for i in range (num_of_enemy):
+    alien(100000000000,1000000)
+    pygame.display.update()
+while 1:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            exit()
+
+
