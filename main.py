@@ -31,7 +31,7 @@ num_of_enemy =4
 for i in range (num_of_enemy):
     AlienImage.append(pic)
     alienXpos.append(random.randint(0,800))
-    alienYpos.append(random.randint(0,400))
+    alienYpos.append(random.randint(0,100))
     if i < 2:
         alienXmove.append(-2)
     else:
@@ -78,10 +78,14 @@ while running:  # game loop
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 playerXmove = -3
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 playerXmove = 3
+            elif event.key == pygame.K_UP:
+                playerYmove = -1.25
+            elif event.key == pygame.K_DOWN:
+                playerYmove = 1.25
             elif event.key == pygame.K_SPACE:
                 if bulletReady:
                     bulletSound =mixer.Sound('laser.wav')
@@ -90,13 +94,23 @@ while running:  # game loop
                     bullet(bulletXpos, playerYpos)
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key ==pygame.K_a or event.key == pygame.K_d:
                 if event.key == pygame.K_LEFT and playerXmove > 0:
                     playerXmove += 0
+                elif event.key == pygame.K_a and playerXmove > 0:
+                        playerXmove += 0
                 elif event.key == pygame.K_RIGHT and playerXmove < 0:
                         playerXmove += 0
+                elif event.key == pygame.K_d and playerXmove < 0:
+                    playerXmove += 0
                 else:
                     playerXmove = 0
+            if event.key == pygame.K_UP:
+                if playerYmove < 0:
+                    playerYmove = 0
+            elif event.key == pygame.K_DOWN:
+                if playerYpos > 0:
+                    playerYmove = 0
 
 
     playerXpos += playerXmove
@@ -104,11 +118,15 @@ while running:  # game loop
         playerXpos = 0
     elif playerXpos >= 736:
         playerXpos = 736
+    if playerYpos <= 0:
+        playerYpos = 0
+    elif playerYpos>= 534:
+        playerYpos = 534
     if bulletReady == False:
         bullet(bulletXpos, bulletYpos)
         bulletYpos -= bulletYmove
         if bulletYpos <= -32:
-            bulletYpos = 480
+            bulletYpos = playerYpos
             bulletReady = True
     for i in range(num_of_enemy):
         alienXpos[i] += alienXmove[i]
@@ -127,7 +145,7 @@ while running:  # game loop
         if collide(alienXpos[i],alienYpos[i],bulletXpos,bulletYpos):
             if bulletReady == False:
                 alienXpos[i] = random.randint(0, 736)
-                alienYpos[i] = random.randint(0, 200)
+                alienYpos[i] = random.randint(0, 100)
                 killSound = mixer.Sound('explosion.wav')
                 killSound.play()
                 bulletReady = True
@@ -143,10 +161,11 @@ while running:  # game loop
                 GAMEOVER()
             running = False
         alien(alienXpos[i], alienYpos[i])
+    playerYpos += playerYmove
     player(playerXpos, playerYpos)
     score_shower(10,10)
     pygame.display.update()
-playerXpos = [10000,1000000,1000000,1000000,10000,1000000]
+alienXpos = [10000,1000000,1000000,1000000,10000,1000000]
 for i in range (num_of_enemy):
     alien(100000000000,1000000)
     pygame.display.update()
