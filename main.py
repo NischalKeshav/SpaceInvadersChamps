@@ -7,18 +7,33 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 mixer.music.load('background.wav')
 mixer.music.play(-1)
-# # Screeetup
+# # Screen setup
 pygame.display.set_caption('Space Invaders')
 icn = pygame.image.load('alien-pixelated-shape-of-a-digital-game-3.png')
 pygame.display.set_icon(icn)
-running = True
+running = False
 # player
 PlayerImage = pygame.image.load('ship copy.png')
 playerXpos = 370
 playerYpos = 480
 playerXmove = 0
 playerYmove = 0
+#button varibles
+color = (255,255,255)
 
+color_light = (170,170,170)
+  
+
+color_dark = (100,100,100)
+  
+
+width = screen.get_width()
+  
+
+height = screen.get_height()
+  
+smallfont = pygame.font.SysFont('Corbel',35)
+text = smallfont.render('Click to start Game' , True , color)
 # alien Atacker
 pic = pygame.image.load('monster.png')
 AlienImage = []
@@ -27,23 +42,23 @@ alienYpos =[]
 alienXmove =[]
 alienYmove =[]
 bulletReady= True
-num_of_enemy =4
+num_of_enemy =5 
 for i in range (num_of_enemy):
     AlienImage.append(pic)
     alienXpos.append(random.randint(0,800))
     alienYpos.append(random.randint(0,100))
     if i < 2:
-        alienXmove.append(-2)
+        alienXmove.append(-10)
     else:
-        alienXmove.append(4)
-    alienYmove.append(.5)
+        alienXmove.append(10)
+    alienYmove.append(.85)
 
 
 #Bullet
 BulletImage = pygame.image.load('bullet.png')
 bulletXpos = random.randint(0,736)
 bulletYpos = playerYpos
-bulletYmove = 10
+bulletYmove = 35
 
 def alien(x, y):
     screen.blit(pic, (x, y))
@@ -66,12 +81,44 @@ score_value = 0
 font = pygame.font.Font('freesansbold.ttf',32)
 font_end = pygame.font.Font('freesansbold.ttf', 72)
 def score_shower(x,y):
-        score = font.render("Score:" + str(score_value),True,(250,255,255))
+        score = font.render("Score : " + str(score_value),True,(250,255,255))
         screen.blit(score,(x,y))
 def GAMEOVER():
     text = font_end.render("GAME OVER", True, (255, 0, 0))
     screen.blit(text,(200,70))
 background = pygame.image.load('background.png')
+while running== False:
+    screen.blit(background,(0,0))  
+    for ev in pygame.event.get():
+          
+        if ev.type == pygame.QUIT:
+            pygame.quit()
+              
+        #checks if a mouse is clicked
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
+                running = True
+                  
+    # fills the screen with a color
+      
+    # stores the (x,y) coordinates into
+    # the variable as a tuple
+    mouse = pygame.mouse.get_pos()
+      
+    # if mouse is hovered on a button it
+    # changes to lighter shade 
+    if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
+        pygame.draw.rect(screen,color_light,[width/2,height/2,140,40])
+        running = True
+          
+    else:
+        pygame.draw.rect(screen,color_dark,[250,250,150,50])
+      
+    # superimposing the text onto our button
+    screen.blit(text , (width/2+50,height/2))
+      
+    # updates the frames of the game
+    pygame.display.update()
 while running:  # game loop
     screen.blit(background,(0,0))  # RGB screenfill
     for event in pygame.event.get():
@@ -79,13 +126,13 @@ while running:  # game loop
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                playerXmove = -3
+                playerXmove = -8
             elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                playerXmove = 3
+                playerXmove = 8
             elif event.key == pygame.K_UP:
-                playerYmove = -1.25
+                playerYmove = -2
             elif event.key == pygame.K_DOWN:
-                playerYmove = 1.25
+                playerYmove = 2
             elif event.key == pygame.K_SPACE:
                 if bulletReady:
                     bulletSound =mixer.Sound('laser.wav')
