@@ -42,7 +42,7 @@ alienYpos =[]
 alienXmove =[]
 alienYmove =[]
 bulletReady= True
-num_of_enemy =5 
+num_of_enemy =4
 for i in range (num_of_enemy):
     AlienImage.append(pic)
     alienXpos.append(random.randint(0,800))
@@ -58,7 +58,7 @@ for i in range (num_of_enemy):
 BulletImage = pygame.image.load('bullet.png')
 bulletXpos = random.randint(0,736)
 bulletYpos = playerYpos
-bulletYmove = 35
+bulletYmove = 40
 
 def alien(x, y):
     screen.blit(pic, (x, y))
@@ -89,6 +89,7 @@ def GAMEOVER():
 background = pygame.image.load('background.png')
 while running== False:
     screen.blit(background,(0,0))  
+    score_shower(10,10)
     for ev in pygame.event.get():
           
         if ev.type == pygame.QUIT:
@@ -96,26 +97,23 @@ while running== False:
               
         #checks if a mouse is clicked
         if ev.type == pygame.MOUSEBUTTONDOWN:
+            if ev.type == pygame.MOUSEBUTTONUP:
+              mouse = (0,0,0,0)
             if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
                 running = True
-                  
-    # fills the screen with a color
-      
-    # stores the (x,y) coordinates into
-    # the variable as a tuple
     mouse = pygame.mouse.get_pos()
       
     # if mouse is hovered on a button it
     # changes to lighter shade 
-    if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
+    if 245 <= mouse[0] <= 500 and 275 <= mouse[1] <= 335:
         pygame.draw.rect(screen,color_light,[width/2,height/2,140,40])
         running = True
           
     else:
-        pygame.draw.rect(screen,color_dark,[250,250,150,50])
+        pygame.draw.rect(screen,color_dark,[245,275,250,50])
       
     # superimposing the text onto our button
-    screen.blit(text , (width/2+50,height/2))
+    screen.blit(text , (250,285))
       
     # updates the frames of the game
     pygame.display.update()
@@ -131,8 +129,12 @@ while running:  # game loop
                 playerXmove = 8
             elif event.key == pygame.K_UP:
                 playerYmove = -2
+                if playerXmove ==0:
+                  playerYmove -= 4
             elif event.key == pygame.K_DOWN:
                 playerYmove = 2
+                if playerXmove ==0:
+                  playerYmove += 4
             elif event.key == pygame.K_SPACE:
                 if bulletReady:
                     bulletSound =mixer.Sound('laser.wav')
