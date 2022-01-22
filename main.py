@@ -27,10 +27,10 @@ color_light = (170,170,170)
 color_dark = (100,100,100)
   
 
-width = screen.get_width()
+width = 800
   
 
-height = screen.get_height()
+height = 600
   
 smallfont = pygame.font.SysFont('Corbel',35)
 text = smallfont.render('Click to start Game' , True , color)
@@ -46,7 +46,7 @@ num_of_enemy =4
 for i in range (num_of_enemy):
     AlienImage.append(pic)
     alienXpos.append(random.randint(0,800))
-    alienYpos.append(random.randint(50,300)) 
+    alienYpos.append(random.randint(50,150)) 
     if i < 2:
         alienXmove.append(-12)
     else:
@@ -101,7 +101,7 @@ while running== False:
             mouse = pygame.mouse.get_pos()
             if ev.type == pygame.MOUSEBUTTONUP:
               mouse = (0,0,0,0)
-            if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
+            if 400 <= mouse[0] <= 340 and 300 <= mouse[1] <= 340:
                 running = True
       
     # if mouse is hovered on a button it
