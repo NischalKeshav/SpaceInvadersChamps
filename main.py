@@ -224,6 +224,8 @@ alienXpos = [10000,1000000,1000000,1000000,10000,1000000]
 for i in range (num_of_enemy):
     alien(100000000000,1000000)
     pygame.display.update()
+screen.blit(background,(0,0))
+score_shower(10,10)
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
