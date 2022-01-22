@@ -42,12 +42,12 @@ alienYpos =[]
 alienXmove =[]
 alienYmove =[]
 bulletReady= True
-num_of_enemy =4
+num_of_enemy =3
 for i in range (num_of_enemy):
     AlienImage.append(pic)
     alienXpos.append(random.randint(0,800))
     alienYpos.append(random.randint(0,100))
-    if i < 2:
+    if i <= 1:
         alienXmove.append(-10)
     else:
         alienXmove.append(10)
@@ -58,7 +58,7 @@ for i in range (num_of_enemy):
 BulletImage = pygame.image.load('bullet.png')
 bulletXpos = random.randint(0,736)
 bulletYpos = playerYpos
-bulletYmove = 40
+bulletYmove = 50
 
 def alien(x, y):
     screen.blit(pic, (x, y))
@@ -73,7 +73,7 @@ def player(x, y):
 
 def collide(enemyX,enemyY,bulletX,bulletY):
     distance = math.sqrt(math.pow(enemyX-bulletX,2) + math.pow(enemyY-bulletY,2))
-    if distance <=36:
+    if distance <=45:
         return True
     else:
         return False
@@ -130,11 +130,11 @@ while running:  # game loop
             elif event.key == pygame.K_UP:
                 playerYmove = -2
                 if playerXmove ==0:
-                  playerYmove -= 4
+                  playerYmove = -6.5
             elif event.key == pygame.K_DOWN:
                 playerYmove = 2
                 if playerXmove ==0:
-                  playerYmove += 4
+                  playerYmove =6.5
             elif event.key == pygame.K_SPACE:
                 if bulletReady:
                     bulletSound =mixer.Sound('laser.wav')
@@ -157,9 +157,13 @@ while running:  # game loop
             if event.key == pygame.K_UP:
                 if playerYmove < 0:
                     playerYmove = 0
+                else:
+                  playerYmove = 8
             elif event.key == pygame.K_DOWN:
                 if playerYpos > 0:
                     playerYmove = 0
+                else:
+                  playerYmove = -8
 
 
     playerXpos += playerXmove
@@ -168,9 +172,11 @@ while running:  # game loop
     elif playerXpos >= 736:
         playerXpos = 736
     if playerYpos <= 0:
-        playerYpos = 0
+        if playerYpos < 0:
+          playerYpos = 0
     elif playerYpos>= 534:
-        playerYpos = 534
+        if playerYpos >0:
+          playerYpos = 534
     if bulletReady == False:
         bullet(bulletXpos, bulletYpos)
         bulletYpos -= bulletYmove
