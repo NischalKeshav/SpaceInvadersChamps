@@ -5,7 +5,7 @@ from pygame import mixer
 pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
-mixer.music.load('background.wav')
+music = mixer.music.load('background.wav')
 mixer.music.play(-1)
 # # Screen setup
 pygame.display.set_caption('Space Invaders')
@@ -42,16 +42,16 @@ alienYpos =[]
 alienXmove =[]
 alienYmove =[]
 bulletReady= True
-num_of_enemy =3
+num_of_enemy =4
 for i in range (num_of_enemy):
     AlienImage.append(pic)
     alienXpos.append(random.randint(0,800))
-    alienYpos.append(random.randint(0,100))
-    if i <= 1:
-        alienXmove.append(-10)
+    alienYpos.append(random.randint(50,300)) 
+    if i < 2:
+        alienXmove.append(-12)
     else:
-        alienXmove.append(10)
-    alienYmove.append(.85)
+        alienXmove.append(12)
+    alienYmove.append(3.5)
 
 
 #Bullet
@@ -87,6 +87,7 @@ def GAMEOVER():
     text = font_end.render("GAME OVER", True, (255, 0, 0))
     screen.blit(text,(200,70))
 background = pygame.image.load('background.png')
+mouse = (0,0,0,0)
 while running== False:
     screen.blit(background,(0,0))  
     score_shower(10,10)
@@ -97,11 +98,11 @@ while running== False:
               
         #checks if a mouse is clicked
         if ev.type == pygame.MOUSEBUTTONDOWN:
+            mouse = pygame.mouse.get_pos()
             if ev.type == pygame.MOUSEBUTTONUP:
               mouse = (0,0,0,0)
             if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
                 running = True
-    mouse = pygame.mouse.get_pos()
       
     # if mouse is hovered on a button it
     # changes to lighter shade 
