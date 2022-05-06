@@ -1,6 +1,4 @@
-import math
-import pygame
-import random
+import math, pygame, random, time
 from pygame import mixer
 pygame.init()
 
@@ -48,10 +46,10 @@ for i in range (num_of_enemy):
     alienXpos.append(random.randint(0,800))
     alienYpos.append(random.randint(50,150)) 
     if i < 2:
-        alienXmove.append(-12)
+        alienXmove.append(-12.5)
     else:
-        alienXmove.append(12)
-    alienYmove.append(3.5)
+        alienXmove.append(12.5)
+    alienYmove.append(4)
 
 
 #Bullet
@@ -193,6 +191,7 @@ while running:  # game loop
         elif alienXpos[i] in range (736,800):
             alienXpos[i] = 736
             alienXmove[i] = -1 * alienXmove[i]
+        if 
 
 
         if alienYpos[i] in range (602,700) :
@@ -208,7 +207,7 @@ while running:  # game loop
                 score_value += 1
 
         if collide(alienXpos[i],alienYpos[i],playerXpos,playerYpos):
-            for j in range(num_of_enemy):
+            for j in range(num_of_enemy):                
                 alienXpos[j] = 20000
                 alienYmove[j]= 0
                 for z in range(num_of_enemy):
@@ -221,6 +220,7 @@ while running:  # game loop
     player(playerXpos, playerYpos)
     score_shower(10,10)
     pygame.display.update()
+
 alienXpos = [10000,1000000,1000000,1000000,10000,1000000]
 for i in range (num_of_enemy):
     alien(100000000000,1000000)
