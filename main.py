@@ -191,12 +191,13 @@ while running:  # game loop
         elif alienXpos[i] in range (736,800):
             alienXpos[i] = 736
             alienXmove[i] = -1 * alienXmove[i]
-        if 
+        
 
 
-        if alienYpos[i] in range (602,700) :
-            alienXpos[i] = random.randint(0, 736)
-            alienYpos[i] = random.randint(0, 200)
+        if alienYpos[i] in range (552,700) or alienYpos[i] in range(0,5) :
+            # alienXpos[i] = random.randint(0, 736)
+            # alienYpos[i] = random.randint(0, 200)
+            alienYmove[i] = -1* alienYmove[i]
         if collide(alienXpos[i],alienYpos[i],bulletXpos,bulletYpos):
             if bulletReady == False:
                 alienXpos[i] = random.randint(0, 736)
