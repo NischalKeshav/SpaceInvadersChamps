@@ -17,6 +17,10 @@ playerYpos = 480
 playerXmove = 0
 playerYmove = 0
 #button varibles
+
+
+
+
 color = (255,255,255)
 
 color_light = (170,170,170)
@@ -46,9 +50,9 @@ for i in range (num_of_enemy):
     alienXpos.append(random.randint(0,800))
     alienYpos.append(random.randint(50,150)) 
     if i < 2:
-        alienXmove.append(-12.5)
+        alienXmove.append(-7.5)
     else:
-        alienXmove.append(12.5)
+        alienXmove.append(7.5)
     alienYmove.append(4)
 
 
@@ -78,9 +82,18 @@ def collide(enemyX,enemyY,bulletX,bulletY):
 score_value = 0
 font = pygame.font.Font('freesansbold.ttf',32)
 font_end = pygame.font.Font('freesansbold.ttf', 72)
+
+with open('HighScore.txt') as f:
+    lines = f.readlines()
+    print(lines)
+    HighScore = int(lines[0])
+  
 def score_shower(x,y):
-        score = font.render("Score : " + str(score_value),True,(250,255,255))
+        global HighScore
+        score = font.render("Score : " + str(score_value)+"                                              High Score: "+str(HighScore),True,(250,255,255))
         screen.blit(score,(x,y))
+        
+        
 def GAMEOVER():
     text = font_end.render("GAME OVER", True, (255, 0, 0))
     screen.blit(text,(200,70))
@@ -178,7 +191,7 @@ while running:  # game loop
           playerYpos = 534
     if bulletReady == False:
         bullet(bulletXpos, bulletYpos)
-        bulletYpos -= bulletYmove
+        bulletYpos -= bulletYmove+2
         if bulletYpos <= -32:
             bulletYpos = playerYpos
             bulletReady = True
@@ -195,9 +208,9 @@ while running:  # game loop
 
 
         if alienYpos[i] in range (552,700) or alienYpos[i] in range(0,5) :
-            # alienXpos[i] = random.randint(0, 736)
-            # alienYpos[i] = random.randint(0, 200)
-            alienYmove[i] = -1* alienYmove[i]
+            alienXpos[i] = random.randint(0, 736)
+            alienYpos[i] = random.randint(0, 200)
+            
         if collide(alienXpos[i],alienYpos[i],bulletXpos,bulletYpos):
             if bulletReady == False:
                 alienXpos[i] = random.randint(0, 736)
@@ -206,6 +219,10 @@ while running:  # game loop
                 killSound.play()
                 bulletReady = True
                 score_value += 1
+                if score_value>HighScore:
+                  HighScore= score_value
+                  with open('HighScore.txt', 'w') as f:
+                    f.write(str(HighScore))
 
         if collide(alienXpos[i],alienYpos[i],playerXpos,playerYpos):
             for j in range(num_of_enemy):                
